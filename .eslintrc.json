@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "lines-around-comment": [
+      "error",
+      {
+        "allowArrayStart": true,
+        "allowBlockStart": true,
+        "beforeBlockComment": false,
+        "beforeLineComment": true
+      }
+    ],
+    "prefer-template": ["error"],
+    "object-shorthand": ["error"],
+    "prefer-const": ["error"],
+    "no-var": ["error"],
+    "indent": ["error", "tab"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "linebreak-style": ["error", "unix"],
+    "semi": ["error", "always" ],
+    "space-in-parens": ["error", "never"],
+    "valid-jsdoc": ["error", {"requireReturn": false, "requireParamDescription": false, "requireReturnDescription": false}],
+    "require-jsdoc": ["error"]
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+  	"eslint:recommended",
+  	"plugin:eslint-plugin/recommended"
+  ],
+  "plugins": [
+  "eslint-plugin"
+  ]
+}

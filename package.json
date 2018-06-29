@@ -1,0 +1,22 @@
+{
+  "name": "eslint-plugin-no-injection",
+  "version": "1.0.0",
+  "description": "Detect injections in js code",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha tests/rules/",
+    "lint": "./node_modules/.bin/eslint index.js lib/ tests/"
+  },
+  "author": "Yoni Jah",
+  "license": "MIT",
+  "dependencies": {},
+  "peerDependencies": {
+    "eslint": "^5.0.1"
+  },
+  "repository": "github:yonjah/eslint-plugin-no-injection",
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-plugin-eslint-plugin": "^1.4.0",
+    "mocha": "^5.2.0"
+  }
+}
