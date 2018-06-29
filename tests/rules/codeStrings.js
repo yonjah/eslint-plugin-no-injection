@@ -36,8 +36,23 @@ module.exports = {
 				var popupHtml = '<pre class="simplepre">' + data + '</pre>';
 				popupHtml += '<div class="close-icon useCursorPointer" onClick="closeScreenshot();"></div>';
 				$('#screenshot_box').html(popupHtml);
-			}`
-
+			}`,
+		ExpressInsecureRoute: `
+			function (req, res) => {
+				const { email, password } = req.body;
+				User.findOne({ email })
+					.then(user => res.send(user));
+			}
+		`,
+		ExpressInsecureMiddleware: `
+			function (req, res) => {
+				const { token } = req.cookies;
+				return Session.findOne({ token, status: 'valid' })
+					.then(seesion => {
+						req.session = session;
+					});
+			}
+		`
 	},
 	safe: {
 		SecureExceptionHandler: `
