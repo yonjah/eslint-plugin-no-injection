@@ -3,11 +3,16 @@
  * @author Yoni Jah
  */
 
+const fs         = require('fs');
+const path       = require('path');
 const rule       = require('../../lib/rules/smart');
 const code       = require('./codeStrings');
 const RuleTester = require('eslint').RuleTester;
 
 const eslintTester = new RuleTester();
+
+const codePath = path.join(__dirname,  '../code_files');
+const files = fs.readdirSync(codePath);
 
 const errorUnsanitized = {message: 'Used with unsanitized input', type: 'Identifier'};
 const errorInjected    = {message: 'Inserted unsanitized as html', type: 'Identifier'};
@@ -19,24 +24,15 @@ const invalid = [{
 	parserOptions: {ecmaVersion: 6}
 }];
 
-eslintTester.run('property', rule, {invalid, valid});
-
-eslintTester.run('property', rule, {
-	invalid: [
-		{
-			code: `
-				${code.unsafe.InsecureDataHandler}
-				InsecureDataHandler(input.value);
-			`,
-			errors: [errorUnsanitized, errorInjected]
+files.forEach((file) => {
+	if (file.indexOf('_test') >= 0) {
+		const code = fs.readFileSync(path.join(codePath, file)).toString();
+		if (file.indexOf('_valid_')) {
+			eslintTester.run(`file: ${file.split('_')[0]}`, rule, {invalid, valid: [{code, parserOptions: {ecmaVersion: 6}}]});
+		} else {
+			eslintTester.run(`file: ${file.split('_')[0]}`, rule, {invalid: [{code, errors: [errorUnsanitized, errorInjected], parserOptions: {ecmaVersion: 6}}], valid});
 		}
-	],
-	valid: [
-		{
-			code: `
-				${code.safe.SecureDataHandler}
-				SecureDataHandler(input.value);
-			`
-		}
-	]
+	}
 });
+
+// eslintTester.run('property', rule, {invalid, valid});

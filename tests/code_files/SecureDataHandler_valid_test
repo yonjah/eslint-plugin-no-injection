@@ -1,0 +1,8 @@
+function SecureDataHandler(data) {
+	data = escapeHTML(JSON.stringify(data, null, 2));
+	var popupHtml = '<pre class="simplepre">' + data + '</pre>';
+	popupHtml += '<div class="close-icon useCursorPointer" onClick="closeScreenshot();"></div>';
+	$('#screenshot_box').html(popupHtml);
+}
+
+SecureDataHandler(input.value);

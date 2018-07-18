@@ -3,12 +3,14 @@
  * @author Yoni Jah
  */
 
-const rule = require('../../lib/rules/smart');
+const rule       = require('../../lib/rules/smart');
+const code       = require('./codeStrings');
 const RuleTester = require('eslint').RuleTester;
 
 const eslintTester = new RuleTester();
 
-const code = require('./codeStrings');
+const errorUnsanitized = {message: 'Used with unsanitized input', type: 'Identifier'};
+const errorInjected    = {message: 'Inserted unsanitized as html', type: 'Identifier'};
 
 eslintTester.run('property', rule, {
 	invalid: [
@@ -17,36 +19,21 @@ eslintTester.run('property', rule, {
 				${code.unsafe.InsecureDataHandler}
 				InsecureDataHandler(input.value);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
 				InsecureDataHandler(input.value);
 				${code.unsafe.InsecureDataHandler}
 			`,
-			errors: [
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' },
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' }
-			]
+			errors: [errorInjected, errorUnsanitized]
 		},
 		{
 			code: `
 				var InsecureDataHandler = ${code.unsafe.InsecureDataHandler};
 				InsecureDataHandler(input.value);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -54,12 +41,7 @@ eslintTester.run('property', rule, {
 				var val = input.value;
 				InsecureDataHandler(val);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -69,12 +51,7 @@ eslintTester.run('property', rule, {
 				}
 				InsecureDataHandler(getVal());
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -85,24 +62,14 @@ eslintTester.run('property', rule, {
 				var val = getVal();
 				InsecureDataHandler(val);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
 				${code.unsafe.InsecureDataHandler}
 				InsecureDataHandler(JSON.stringify(input.value));
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -110,12 +77,7 @@ eslintTester.run('property', rule, {
 				var val = JSON.stringify(input.value);
 				InsecureDataHandler(val);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -126,12 +88,7 @@ eslintTester.run('property', rule, {
 				var val = getVal();
 				InsecureDataHandler(val);
 			`,
-			errors: [
-				{ message: 'Used with unsanitized input',
-					type: 'Identifier' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
-			]
+			errors: [errorUnsanitized, errorInjected]
 		},
 		{
 			code: `
@@ -142,8 +99,8 @@ eslintTester.run('property', rule, {
 			errors: [
 				{ message: 'Used with unsanitized input',
 					type: 'BinaryExpression' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
+				{ message: 'Inserted unsanitized as html',
+					type: 'Identifier' }
 			]
 		},
 		{
@@ -159,8 +116,8 @@ eslintTester.run('property', rule, {
 			errors: [
 				{ message: 'Used with unsanitized input',
 					type: 'BinaryExpression' },
-				{ message: 'Inserted into HTML',
-					type: 'MemberExpression' }
+				{ message: 'Inserted unsanitized as html',
+					type: 'Identifier' }
 			]
 		}
 	],
@@ -226,6 +183,12 @@ eslintTester.run('property', rule, {
 					return input.value;
 				}
 				InsecureDataHandler(getVal);
+			`
+		},
+		{
+			code: `
+				${code.safe.SecureDataHandler}
+				SecureDataHandler(input.value);
 			`
 		}
 	]
