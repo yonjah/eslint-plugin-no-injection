@@ -1,5 +1,5 @@
-function SecureDataHandler(data) {
-	data = escapeHTML(JSON.stringify(data, null, 2));
+function InSecureDataHandler(data) {
+	data = JSON.stringify(data, null, 2);
 	var popupHtml = '<pre class="simplepre">' + data + '</pre>';
 	popupHtml += '<div class="close-icon useCursorPointer" onClick="closeScreenshot();"></div>';
 
@@ -12,4 +12,4 @@ function not_an_isse() {
 	console.log('abc');
 }
 
-SecureDataHandler(input.value);
+InSecureDataHandler(input.value);

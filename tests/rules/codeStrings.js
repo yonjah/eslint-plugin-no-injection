@@ -37,6 +37,15 @@ module.exports = {
 				popupHtml += '<div class="close-icon useCursorPointer" onClick="closeScreenshot();"></div>';
 				$('#screenshot_box').html(popupHtml);
 			}`,
+		BadDataHandler: `
+			function BadDataHandler(data) {
+				data = JSON.stringify(data, null, 2);
+				var popupHtml = '<pre class="simplepre">' + data + '</pre>';
+				popupHtml += '<div class="close-icon useCursorPointer" onClick="closeScreenshot();"></div>';
+				$('#screenshot_box').html(popupHtml);
+				popupHtml = escapeHTML(popupHtml);
+				$('#screenshot_box').html(popupHtml);
+			}`,
 		ExpressInsecureRoute: `
 			function (req, res) => {
 				const { email, password } = req.body;
